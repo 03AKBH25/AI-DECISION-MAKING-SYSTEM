@@ -1,0 +1,20 @@
+[
+  {
+    "topic": "cement",
+    "keywords": ["cement", "bags", "construction"],
+    "rule": "Small residential projects usually require limited cement unless structure is large.",
+    "suggestions": [
+      "Ask why extra cement is required",
+      "Ask for detailed material breakdown"
+    ]
+  },
+  {
+    "topic": "tiles",
+    "keywords": ["tiles", "premium", "flooring"],
+    "rule": "Premium materials are not necessary for all areas in a house.",
+    "suggestions": [
+      "Ask if premium tiles are required everywhere",
+      "Ask for cost-effective alternatives"
+    ]
+  }
+]
