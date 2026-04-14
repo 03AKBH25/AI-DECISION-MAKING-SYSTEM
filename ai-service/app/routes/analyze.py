@@ -6,10 +6,8 @@ router = APIRouter()
 @router.post("/analyze")
 def analyze(data: dict):
     text = data.get("text")
+    user_id = data.get("user_id", "default_user")
 
-    result = analyze_text(text)
+    result = analyze_text(text, user_id)
 
-    return {
-        "input": text,
-        "result": result
-    }
+    return result

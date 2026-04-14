@@ -1,29 +1,25 @@
 from app.rag.vector_store import search
 from app.services.llm_service import generate_response
+from app.services.redis_service import add_message, get_messages
 
-#memory
-conversation_memory = []
+def analyze_text(text: str, user_id: str):
+    # Store message in Redis
+    add_message(user_id, text)
 
-def analyze_text(text: str):
-    #Store current message
-    conversation_memory.append(text)
+    # Get conversation history
+    history = get_messages(user_id)
 
-    #Keep only last 5 messages
-    recent_context = conversation_memory[-5:]
+    # Combine context
+    conversation_context = " ".join(history)
 
-    #Combine into context string
-    conversation_context = " ".join(recent_context)
-
-    #RAG search using full context
+    # RAG search
     results = search(conversation_context)
+    retrieved_context = " ".join([item["rule"] for item in results])
 
-    retrieved_context  =" ".join([item["rule"] for item in results])
-
-    #Send both current input and conversation context to LLM
-
+    # LLM
     llm_output = generate_response(conversation_context, retrieved_context)
 
     return {
-        "memory": recent_context,
+        "history": history,
         "response": llm_output
     }
