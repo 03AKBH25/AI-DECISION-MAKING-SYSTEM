@@ -1,24 +1,17 @@
-import json
+from app.rag.vector_store import search
+from app.services.llm_service import generate_response
 
-# Load knowledge base once
-with open("app/rag/knowledge_base.json", "r") as f:
-    knowledge_base = json.load(f)
-
+#memory
+conversation_memory = []
 
 def analyze_text(text: str):
-    text_lower = text.lower()
+    #Store current message
+    conversation_memory.append(text)
 
-    matched_suggestions = []
+    #Keep only last 5 messages
+    recent_context = conversation_memory[-5:]
 
-    for item in knowledge_base:
-        for keyword in item["keywords"]:
-            if keyword in text_lower:
-                matched_suggestions.extend(item["suggestions"])
-                break
+    #Combine into context string
+    conversation_context = " ".join(recent_context)
 
-    if not matched_suggestions:
-        matched_suggestions.append("No strong suggestions found. Ask for more clarification.")
-
-    return {
-        "suggestions": matched_suggestions
-    }
+    #RAG search using full context
