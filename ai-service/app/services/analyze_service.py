@@ -15,3 +15,15 @@ def analyze_text(text: str):
     conversation_context = " ".join(recent_context)
 
     #RAG search using full context
+    results = search(conversation_context)
+
+    retrieved_context  =" ".join([item["rule"] for item in results])
+
+    #Send both current input and conversation context to LLM
+
+    llm_output = generate_response(conversation_context, retrieved_context)
+
+    return {
+        "memory": recent_context,
+        "response": llm_output
+    }
